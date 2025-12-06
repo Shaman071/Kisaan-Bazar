@@ -13,5 +13,6 @@ router.post("/", verifyToken, sendMessage);
 router.get("/", verifyToken, getConversations);
 router.get("/:userId", verifyToken, getConversation);
 router.put("/read/:userId", verifyToken, markAsRead);
+router.post("/assistant", require("../controllers/messageController").getAiResponse);
 
 module.exports = router;

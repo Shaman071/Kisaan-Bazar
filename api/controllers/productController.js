@@ -1,5 +1,6 @@
 const Product = require("../models/ProductModel");
 const User = require("../models/UserModel");
+const ProductView = require("../models/ProductViewModel");
 
 // @desc    Create a product
 // @route   POST /api/products
@@ -29,10 +30,49 @@ exports.getAllProducts = async (req, res) => {
   try {
     const query = {};
 
-    // Search filter by name and description
+    // Intelligent Search: Text Index with Regex Fallback
     if (req.query.search) {
-      const searchRegex = new RegExp(req.query.search, "i");
-      query.$or = [{ name: searchRegex }, { description: searchRegex }];
+      const searchTerm = req.query.search;
+
+      // 1. Try Text Search first (ranked by relevance)
+      const textQuery = { ...query, $text: { $search: searchTerm } };
+      let searchResults = await Product.find(textQuery).select({ score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } });
+
+      // 2. If no/few results, try Fuzzy Regex
+      if (searchResults.length === 0) {
+        const regex = new RegExp(searchTerm.split(' ').join('|'), 'i'); // Simple "OR" regex for words
+        const fuzzyQuery = { ...query, $or: [{ name: regex }, { description: regex }] };
+        searchResults = await Product.find(fuzzyQuery).sort({ createdAt: -1 });
+      }
+
+      // If we found results via search, we want to return them directly, 
+      // but we still need to apply other filters (price, category) if they existed in 'query'.
+      // The logic above combined 'query' into textQuery/fuzzyQuery, so we can just use searchResults 
+      // BUT we need pagination logic which is complex with hybrid list. 
+      // For simplicity in this "Smart" feature within existing structure:
+      // We will rely on Mongoose's find(). If text search was requested, we modify 'query' object.
+
+      // Re-approach: Modify 'query' object directly.
+      // But Mongoose can't easily do "Text OR Regex" in one query object easily without aggregation.
+      // Let's stick to the Regex implementation which covers "fuzzy" matching better for partial words like "tomto" -> "tomato" (if regex is smart) 
+      // or "toma" -> "tomato". Text search requires full words usually.
+
+      // User requested "Fuzzy Matching (Mongo Text + Regex)".
+      // Let's implement priority: Text Search -> IDs.
+
+      if (searchResults.length > 0) {
+        const ids = searchResults.map(p => p._id);
+        query._id = { $in: ids };
+        // Remove the $or constraint if we found specific text matches to avoid conflict
+        // actually we haven't added $or to 'query' yet in this block.
+      } else {
+        // Fallback to strict regex if text search failed totally
+        // Logic: "tomto" won't match "tomato" with standard regex. 
+        // We need to just use the regex user suggested "/tom.*/i" which is just prefix match.
+        // Or we can simple use the regex we built above.
+        const searchRegex = new RegExp(req.query.search, "i");
+        query.$or = [{ name: searchRegex }, { description: searchRegex }];
+      }
     }
 
     if (req.query.category) {

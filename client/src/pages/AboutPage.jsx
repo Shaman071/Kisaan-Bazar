@@ -8,7 +8,10 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 
+import { useTranslation } from "react-i18next";
+
 const AboutPage = () => {
+  const { t } = useTranslation();
   return (
     <div>
       <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-green-50 to-white">
@@ -24,14 +27,13 @@ const AboutPage = () => {
         <div className="relative z-10 w-full">
           <div className="max-w-4xl mx-auto text-center px-4">
             <div className="inline-block bg-green-100 text-green-800 text-xs font-semibold rounded-full px-3 py-1 mb-6 shadow-sm border border-green-200">
-              <span className="uppercase tracking-wider">Our Story</span>
+              <span className="uppercase tracking-wider">{t('about.badge')}</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-gray-900">
-              About KisanBazar
+              {t('about.title')}
             </h1>
             <p className="text-lg md:text-xl text-gray-600 mb-10">
-              Connecting local farmers with consumers to promote sustainable
-              agriculture and strengthen community bonds.
+              {t('about.desc')}
             </p>
           </div>
         </div>
@@ -44,7 +46,7 @@ const AboutPage = () => {
               <div className="flex flex-col md:flex-row items-center gap-12">
                 <div className="md:w-1/2 text-center md:text-left">
                   <h2 className="text-4xl font-extrabold text-green-700 mb-6 leading-tight">
-                    Our Mission
+                    {t('about.mission_title')}
                   </h2>
                   <p className="text-gray-800 text-lg mb-4">
                     KisanBazar was founded with a simple yet powerful mission:
@@ -114,7 +116,7 @@ const AboutPage = () => {
 
         <section className="mb-24">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
-            Benefits
+            {t('about.benefits_title')}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -178,7 +180,7 @@ const AboutPage = () => {
 
         <section className="mb-24">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
-            Meet Our Team
+            {t('about.team_title')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
@@ -215,27 +217,27 @@ const AboutPage = () => {
 
         <section className="mb-24 bg-green-50 rounded-3xl p-8 md:p-12">
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
-            Contact Us
+            {t('about.contact_title')}
           </h2>
           <div className="max-w-2xl mx-auto text-center">
             <p className="text-lg text-gray-700 mb-8">
-              Have any queries or suggestions? We'd love to hear from you. Reach out to us directly or drop an email!
+              {t('about.contact_desc')}
             </p>
             <form className="space-y-4 text-left bg-white p-6 rounded-xl shadow-sm">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input type="text" id="name" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" placeholder="Your Name" />
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">{t('contact.name')}</label>
+                <input type="text" id="name" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" placeholder={t('contact.name')} />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">{t('contact.email')}</label>
                 <input type="email" id="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" placeholder="your@email.com" />
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                <textarea id="message" rows="4" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" placeholder="How can we help you?"></textarea>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">{t('contact.message')}</label>
+                <textarea id="message" rows="4" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" placeholder={t('contact.message')}></textarea>
               </div>
               <button type="submit" className="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition-colors shadow-md">
-                Send Message
+                {t('contact.send')}
               </button>
             </form>
           </div>

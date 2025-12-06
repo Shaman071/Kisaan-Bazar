@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getFarmerProducts } from "../../redux/slices/productSlice";
@@ -28,11 +28,34 @@ const DashboardPage = () => {
   );
   const { user } = useSelector((state) => state.auth);
 
+  // IMPORTANT: All hooks must be at the top, before any conditional returns
+  const [analytics, setAnalytics] = useState(null);
+
   useEffect(() => {
     dispatch(getFarmerProducts());
     dispatch(getFarmerOrders());
     dispatch(getConversations());
   }, [dispatch]);
+
+  useEffect(() => {
+    // Fetch smart analytics
+    const fetchAnalytics = async () => {
+      try {
+        const token = user?.token || JSON.parse(localStorage.getItem('userInfo'))?.token;
+        if (!token) return;
+
+        const { data } = await import("axios").then(m => m.default.get(
+          `${import.meta.env.VITE_API_URL}/analytics/farmer`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        ));
+
+        if (data.success) setAnalytics(data);
+      } catch (e) {
+        console.error("Analytics fetch fail", e);
+      }
+    };
+    if (user) fetchAnalytics();
+  }, [user]);
 
   const orderCounts = {
     pending: ordersLoading
@@ -68,6 +91,8 @@ const DashboardPage = () => {
   if (productsLoading || ordersLoading || messagesLoading) {
     return <Loader />;
   }
+
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -139,6 +164,19 @@ const DashboardPage = () => {
             From completed orders
           </span>
         </div>
+
+        {/* AI Insight Card */}
+        {analytics && (
+          <div className="glass p-6 rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-indigo-700">AI Insights 🧠</h3>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-700">busy Day: <span className="font-bold text-indigo-600">{analytics.peakDay}</span></p>
+              <p className="text-sm text-gray-700">Trending: <span className="font-bold text-indigo-600">{analytics.bestSelling?.[0]?.productDetails?.name || "N/A"}</span></p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Recent Orders */}
@@ -183,11 +221,11 @@ const DashboardPage = () => {
                     <td className="text-center py-3">
                       <span
                         className={`badge ${order.status === "pending"
-                            ? "badge-blue"
-                            : order.status === "accepted" ||
-                              order.status === "completed"
-                              ? "badge-green"
-                              : "badge-red"
+                          ? "badge-blue"
+                          : order.status === "accepted" ||
+                            order.status === "completed"
+                            ? "badge-green"
+                            : "badge-red"
                           }`}
                       >
                         {order.status.charAt(0).toUpperCase() +
@@ -322,10 +360,10 @@ const DashboardPage = () => {
                       <td className="text-center py-3">
                         <span
                           className={`${product.quantityAvailable === 0
-                              ? "text-red-500"
-                              : product.quantityAvailable < 5
-                                ? "text-orange-500"
-                                : "text-yellow-500"
+                            ? "text-red-500"
+                            : product.quantityAvailable < 5
+                              ? "text-orange-500"
+                              : "text-yellow-500"
                             } font-medium`}
                         >
                           {product.quantityAvailable} {product.unit}

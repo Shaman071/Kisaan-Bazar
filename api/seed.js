@@ -4,6 +4,7 @@ const connectDB = require("./db/connection");
 const Product = require("./models/ProductModel");
 const Category = require("./models/CategoryModel");
 const User = require("./models/UserModel");
+const FarmerProfile = require("./models/FarmerProfileModel");
 
 dotenv.config();
 

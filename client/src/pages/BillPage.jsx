@@ -1,10 +1,14 @@
+"use client";
+
 import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails } from "../redux/slices/orderSlice";
 import Loader from "../components/Loader";
+import { useTranslation } from "react-i18next";
 
 const BillPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -29,13 +33,13 @@ const BillPage = () => {
           to={`/orders/${order._id}`}
           className="inline-flex items-center text-green-600 hover:text-green-700 transition-colors duration-200"
         >
-          Back to Order
+          {t('orders.back_to_order', 'Back to Order')}
         </Link>
         <button
           onClick={handlePrint}
           className="btn btn-primary"
         >
-          Print Bill
+          {t('orders.print_bill', 'Print Bill')}
         </button>
       </div>
 
@@ -43,15 +47,15 @@ const BillPage = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-3 text-gray-800">
-              Invoice
+              {t('orders.invoice', 'Invoice')}
             </h1>
             <p className="text-gray-500">
-              Order #{order._id.substring(0, 8)}
+              {t('orders.order_id', 'Order')} #{order._id.substring(0, 8)}
             </p>
           </div>
           <div>
             <p className="text-gray-500">
-              Date: {new Date(order.createdAt).toLocaleDateString()}
+              {t('orders.date', 'Date')}: {new Date(order.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -59,14 +63,14 @@ const BillPage = () => {
         <div className="grid grid-cols-2 gap-8 mb-8">
           <div>
             <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Billed To
+              {t('orders.billed_to', 'Billed To')}
             </h2>
             <p>{order.consumer.name}</p>
             <p>{order.consumer.email}</p>
           </div>
           <div>
             <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Billed By
+              {t('orders.billed_from', 'Billed By')}
             </h2>
             <p>{order.farmer.name}</p>
             <p>{order.farmer.email}</p>
@@ -76,10 +80,10 @@ const BillPage = () => {
         <table className="w-full mb-8">
           <thead>
             <tr className="border-b-2 border-gray-300">
-              <th className="text-left py-2">Product</th>
-              <th className="text-right py-2">Price</th>
-              <th className="text-right py-2">Quantity</th>
-              <th className="text-right py-2">Total</th>
+              <th className="text-left py-2">{t('orders.product', 'Product')}</th>
+              <th className="text-right py-2">{t('orders.price', 'Price')}</th>
+              <th className="text-right py-2">{t('orders.quantity', 'Quantity')}</th>
+              <th className="text-right py-2">{t('orders.total', 'Total')}</th>
             </tr>
           </thead>
           <tbody>
@@ -99,11 +103,11 @@ const BillPage = () => {
         <div className="flex justify-end">
           <div className="w-1/3">
             <div className="flex justify-between">
-              <p>Subtotal</p>
+              <p>{t('orders.subtotal', 'Subtotal')}</p>
               <p>₹{order.totalAmount.toFixed(2)}</p>
             </div>
             <div className="flex justify-between font-bold text-xl">
-              <p>Total</p>
+              <p>{t('orders.total', 'Total')}</p>
               <p>₹{order.totalAmount.toFixed(2)}</p>
             </div>
           </div>

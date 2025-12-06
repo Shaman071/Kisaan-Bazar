@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { placeholder } from "../assets";
 
 const ProductCard = ({ product }) => {
+  const { t } = useTranslation();
   const handleImageError = (e) => {
     e.target.onerror = null;
     e.target.src = placeholder;
@@ -28,14 +30,14 @@ const ProductCard = ({ product }) => {
         )}
         {product.isOrganic && (
           <span className="absolute top-2 right-2 badge badge-green">
-            Organic
+            {t('products.organic')}
           </span>
         )}
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold mb-1 truncate">{product.name}</h3>
         <p className="text-gray-500 text-sm mb-2">
-          {product.category?.name || "General"}
+          {product.category?.name || t('products.general')}
         </p>
         <div className="flex justify-between items-center">
           <span className="text-green-600 font-bold">
@@ -45,7 +47,7 @@ const ProductCard = ({ product }) => {
             to={`/products/${product._id}`}
             className="text-sm text-green-500 hover:text-green-700 font-medium"
           >
-            View Details
+            {t('products.view_details')}
           </Link>
         </div>
       </div>

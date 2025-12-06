@@ -32,6 +32,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/analytics", require("./routes/analyticsRoutes"));
+app.use("/api/recommendations", require("./routes/recommendationRoutes"));
 
 // Start server
 app.listen(PORT, () => {

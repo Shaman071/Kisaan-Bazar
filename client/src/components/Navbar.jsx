@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
+import { useTranslation } from "react-i18next";
+import LanguageSelector from "./LanguageSelector";
 import {
   FaLeaf,
   FaShoppingCart,
@@ -16,6 +18,7 @@ import {
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,7 +45,9 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
             <FaLeaf className="text-green-500 text-2xl" />
-            <span className="text-xl font-bold text-green-600">KisanBazar</span>
+            <span className="text-xl font-bold text-green-600">
+              {t('nav.brand')}
+            </span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-6">
@@ -50,29 +55,29 @@ const Navbar = () => {
               to="/"
               className="text-gray-700 hover:text-green-500 transition-colors"
             >
-              Home
+              {t('nav.home')}
             </Link>
             <Link
               to="/products"
               className="text-gray-700 hover:text-green-500 transition-colors"
             >
-              Products
+              {t('nav.products')}
             </Link>
             <Link
               to="/farmers"
               className="text-gray-700 hover:text-green-500 transition-colors"
             >
-              Farmers
+              {t('nav.farmers')}
             </Link>
             <Link
               to="/about"
               className="text-gray-700 hover:text-green-500 transition-colors"
             >
-              About
+              {t('nav.about')}
             </Link>
 
             {isAuthenticated && user?.role === "consumer" && (
-            <Link to="/checkout" className="relative">
+              <Link to="/checkout" className="relative">
                 <FaShoppingCart className="text-gray-700 hover:text-green-500 text-xl transition-colors" />
                 {cartItems.length > 0 && (
                   <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -81,6 +86,8 @@ const Navbar = () => {
                 )}
               </Link>
             )}
+
+            <LanguageSelector />
 
             {isAuthenticated ? (
               <div className="relative">
@@ -102,7 +109,7 @@ const Navbar = () => {
                         className="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-500"
                         onClick={() => setIsProfileOpen(false)}
                       >
-                        Admin Dashboard
+                        {t('nav.admin_dashboard')}
                       </Link>
                     )}
 
@@ -112,7 +119,7 @@ const Navbar = () => {
                         className="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-500"
                         onClick={() => setIsProfileOpen(false)}
                       >
-                        Farmer Dashboard
+                        {t('nav.farmer_dashboard')}
                       </Link>
                     )}
 
@@ -123,7 +130,7 @@ const Navbar = () => {
                           className="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-500"
                           onClick={() => setIsProfileOpen(false)}
                         >
-                          Profile
+                          {t('nav.profile')}
                         </Link>
 
                         <Link
@@ -131,7 +138,7 @@ const Navbar = () => {
                           className="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-500"
                           onClick={() => setIsProfileOpen(false)}
                         >
-                          Orders
+                          {t('nav.orders')}
                         </Link>
                       </>
                     )}
@@ -141,7 +148,7 @@ const Navbar = () => {
                       className="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-500"
                       onClick={() => setIsProfileOpen(false)}
                     >
-                      Messages
+                      {t('nav.messages')}
                     </Link>
 
                     <button
@@ -153,7 +160,7 @@ const Navbar = () => {
                     >
                       <div className="flex items-center space-x-2">
                         <FaSignOutAlt />
-                        <span>Logout</span>
+                        <span> {t('nav.logout')}</span>
                       </div>
                     </button>
                   </div>
@@ -165,20 +172,21 @@ const Navbar = () => {
                   to="/login"
                   className="text-gray-700 hover:text-green-500 transition-colors"
                 >
-                  Login
+                  {t('nav.login')}
                 </Link>
                 <Link
                   to="/register"
                   className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
                 >
-                  Register
+                  {t('nav.register')}
                 </Link>
               </div>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-4">
+            <LanguageSelector />
             <button
               onClick={toggleMenu}
               className="text-gray-700 hover:text-green-500 focus:outline-none"
@@ -201,28 +209,28 @@ const Navbar = () => {
                 className="text-gray-700 hover:text-green-500 transition-colors"
                 onClick={toggleMenu}
               >
-                Home
+                {t('nav.home')}
               </Link>
               <Link
                 to="/products"
                 className="text-gray-700 hover:text-green-500 transition-colors"
                 onClick={toggleMenu}
               >
-                Products
+                {t('nav.products')}
               </Link>
               <Link
                 to="/farmers"
                 className="text-gray-700 hover:text-green-500 transition-colors"
                 onClick={toggleMenu}
               >
-                Farmers
+                {t('nav.farmers')}
               </Link>
               <Link
                 to="/about"
                 className="text-gray-700 hover:text-green-500 transition-colors"
                 onClick={toggleMenu}
               >
-                About
+                {t('nav.about')}
               </Link>
 
               {isAuthenticated && user?.role === "consumer" && (
@@ -232,7 +240,7 @@ const Navbar = () => {
                   onClick={toggleMenu}
                 >
                   <FaShoppingCart />
-                  <span>Cart ({cartItems.length})</span>
+                  <span> {t('nav.cart')} ({cartItems.length})</span>
                 </Link>
               )}
               {isAuthenticated ? (
@@ -243,7 +251,7 @@ const Navbar = () => {
                       className="text-gray-700 hover:text-green-500 transition-colors"
                       onClick={toggleMenu}
                     >
-                      Admin Dashboard
+                      {t('nav.admin_dashboard')}
                     </Link>
                   )}
 
@@ -253,7 +261,7 @@ const Navbar = () => {
                       className="text-gray-700 hover:text-green-500 transition-colors"
                       onClick={toggleMenu}
                     >
-                      Farmer Dashboard
+                      {t('nav.farmer_dashboard')}
                     </Link>
                   )}
 
@@ -262,7 +270,7 @@ const Navbar = () => {
                     className="text-gray-700 hover:text-green-500 transition-colors"
                     onClick={toggleMenu}
                   >
-                    Profile
+                    {t('nav.profile')}
                   </Link>
 
                   <Link
@@ -270,7 +278,7 @@ const Navbar = () => {
                     className="text-gray-700 hover:text-green-500 transition-colors"
                     onClick={toggleMenu}
                   >
-                    Orders
+                    {t('nav.orders')}
                   </Link>
 
                   <Link
@@ -278,7 +286,7 @@ const Navbar = () => {
                     className="text-gray-700 hover:text-green-500 transition-colors"
                     onClick={toggleMenu}
                   >
-                    Messages
+                    {t('nav.messages')}
                   </Link>
 
                   <button
@@ -289,7 +297,7 @@ const Navbar = () => {
                     className="flex items-center space-x-2 text-gray-700 hover:text-green-500 transition-colors"
                   >
                     <FaSignOutAlt />
-                    <span>Logout</span>
+                    <span> {t('nav.logout')}</span>
                   </button>
                 </>
               ) : (
@@ -299,14 +307,14 @@ const Navbar = () => {
                     className="text-gray-700 hover:text-green-500 transition-colors"
                     onClick={toggleMenu}
                   >
-                    Login
+                    {t('nav.login')}
                   </Link>
                   <Link
                     to="/register"
                     className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-center"
                     onClick={toggleMenu}
                   >
-                    Register
+                    {t('nav.register')}
                   </Link>
                 </div>
               )}

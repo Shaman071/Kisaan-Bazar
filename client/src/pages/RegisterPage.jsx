@@ -14,7 +14,10 @@ import {
 } from "react-icons/fa";
 import Loader from "../components/Loader";
 
+import { useTranslation } from "react-i18next";
+
 const RegisterPage = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -108,7 +111,7 @@ const RegisterPage = () => {
             <FaLeaf className="text-green-500 text-4xl" />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Create your account
+            {t('auth.register_title')}
           </h2>
           <p className="mt-2 text-sm text-gray-600">
             Or{" "}
@@ -116,7 +119,7 @@ const RegisterPage = () => {
               to="/login"
               className="font-medium text-green-600 hover:text-green-500"
             >
-              sign in to your existing account
+              {t('auth.or_login')}
             </Link>
           </p>
         </div>
@@ -146,7 +149,7 @@ const RegisterPage = () => {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Full Name
+                {t('auth.name')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -160,7 +163,7 @@ const RegisterPage = () => {
                   value={formData.name}
                   onChange={handleChange}
                   className="form-input pl-10"
-                  placeholder="Full name"
+                  placeholder={t('auth.name')}
                 />
               </div>
             </div>
@@ -170,7 +173,7 @@ const RegisterPage = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Email Address
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -185,7 +188,7 @@ const RegisterPage = () => {
                   value={formData.email}
                   onChange={handleChange}
                   className="form-input pl-10"
-                  placeholder="Email address"
+                  placeholder={t('auth.email')}
                 />
               </div>
             </div>
@@ -195,7 +198,7 @@ const RegisterPage = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Password
+                {t('auth.password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -209,7 +212,7 @@ const RegisterPage = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="form-input pl-10"
-                  placeholder="Password"
+                  placeholder={t('auth.password')}
                   minLength="6"
                 />
               </div>
@@ -220,7 +223,7 @@ const RegisterPage = () => {
                 htmlFor="confirmPassword"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Confirm Password
+                {t('auth.confirm_password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -234,7 +237,7 @@ const RegisterPage = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="form-input pl-10"
-                  placeholder="Confirm password"
+                  placeholder={t('auth.confirm_password')}
                   minLength="6"
                 />
               </div>
@@ -245,7 +248,7 @@ const RegisterPage = () => {
                 htmlFor="role"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                I am a:
+                {t('auth.role_label')}
               </label>
               <select
                 id="role"
@@ -255,15 +258,15 @@ const RegisterPage = () => {
                 className="form-input"
                 required
               >
-                <option value="consumer">Consumer</option>
-                <option value="farmer">Farmer</option>
+                <option value="consumer">{t('auth.role_consumer')}</option>
+                <option value="farmer">{t('auth.role_farmer')}</option>
               </select>
             </div>
 
             {formData.role === "farmer" && (
               <div className="space-y-4 border-t border-gray-200 pt-4 mt-4">
                 <h3 className="text-lg font-medium text-gray-900">
-                  Farmer Verification
+                  {t('auth.farmer_verification')}
                 </h3>
                 <p className="text-sm text-gray-500 mb-4">
                   Please provide your farming credentials to verify your account.
@@ -274,7 +277,7 @@ const RegisterPage = () => {
                     htmlFor="farmName"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Farm Name
+                    {t('auth.farm_name')}
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -298,7 +301,7 @@ const RegisterPage = () => {
                     htmlFor="phone"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Phone Number
+                    {t('auth.phone')}
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -311,7 +314,7 @@ const RegisterPage = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       className="form-input pl-10"
-                      placeholder="Phone number"
+                      placeholder={t('auth.phone')}
                       required={formData.role === "farmer"}
                     />
                   </div>
@@ -362,7 +365,7 @@ const RegisterPage = () => {
 
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Address
+                {t('auth.address')}
               </label>
               <div className="grid grid-cols-1 gap-3">
                 <div className="relative">
@@ -420,7 +423,7 @@ const RegisterPage = () => {
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               disabled={loading}
             >
-              {loading ? "Creating Account..." : "Create Account"}
+              {loading ? t('auth.creating_account') : t('auth.create_account')}
             </button>
           </div>
         </form>

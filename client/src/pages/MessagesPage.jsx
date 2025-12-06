@@ -6,8 +6,10 @@ import { getConversations } from "../redux/slices/messageSlice";
 import MessageItem from "../components/MessageItem";
 import Loader from "../components/Loader";
 import { FaComments } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const MessagesPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   // SAFE defaults to avoid undefined crashes
@@ -30,7 +32,7 @@ const MessagesPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">My Messages</h1>
+      <h1 className="text-3xl font-bold mb-8">{t('messages.title', 'My Messages')}</h1>
 
       {Array.isArray(conversations) && conversations.length > 0 ? (
         <div className="space-y-4">
@@ -44,9 +46,9 @@ const MessagesPage = () => {
       ) : (
         <div className="text-center py-12 glass rounded-xl">
           <FaComments className="text-green-500 text-5xl mx-auto mb-4" />
-          <h3 className="text-xl font-semibold mb-2">No Messages Yet</h3>
+          <h3 className="text-xl font-semibold mb-2">{t('messages.no_messages', 'No Messages Yet')}</h3>
           <p className="text-gray-600">
-            You don't have any conversations yet. Start messaging to begin a chat.
+            {t('messages.no_messages_desc', "You don't have any conversations yet. Start messaging to begin a chat.")}
           </p>
         </div>
       )}

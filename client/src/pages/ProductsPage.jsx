@@ -8,7 +8,10 @@ import ProductCard from "../components/ProductCard";
 import Loader from "../components/Loader";
 import { FaSearch } from "react-icons/fa";
 
+import { useTranslation } from "react-i18next";
+
 const ProductsPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   // Provide default values to prevent map errors on initial render
   const { products = [], loading } = useSelector(
@@ -83,11 +86,10 @@ const ProductsPage = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="bg-green-50 rounded-xl p-8 mb-8">
         <h1 className="text-4xl font-bold text-green-800 mb-2">
-          Fresh From The Farm
+          {t('products.title')}
         </h1>
         <p className="text-green-700">
-          Explore a wide variety of fresh, locally-sourced products directly
-          from our farmers.
+          {t('products.subtitle')}
         </p>
       </div>
 
@@ -100,7 +102,7 @@ const ProductsPage = () => {
               htmlFor="search"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Search Product
+              {t('products.search_label')}
             </label>
             <input
               type="text"
@@ -109,7 +111,7 @@ const ProductsPage = () => {
               value={debouncedSearch}
               onChange={handleFilterChange}
               className="form-input pl-10"
-              placeholder="e.g., Tomatoes"
+              placeholder={t('products.search_placeholder')}
             />
             <FaSearch className="absolute left-3 top-9 text-gray-400" />
           </div>
@@ -120,7 +122,7 @@ const ProductsPage = () => {
               htmlFor="category"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Category
+              {t('products.category_label')}
             </label>
             <select
               name="category"
@@ -129,7 +131,7 @@ const ProductsPage = () => {
               onChange={handleFilterChange}
               className="form-input"
             >
-              <option value="">All Categories</option>
+              <option value="">{t('products.all_categories')}</option>
               {categories.map((cat) => (
                 <option key={cat._id} value={cat._id}>
                   {cat.name}
@@ -141,7 +143,7 @@ const ProductsPage = () => {
           {/* Price Range */}
           <div className="lg:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Price Range (₹)
+              {t('products.price_range')}
             </label>
             <div className="flex items-center space-x-2">
               <input
@@ -150,7 +152,7 @@ const ProductsPage = () => {
                 value={filters.minPrice}
                 onChange={handleFilterChange}
                 className="form-input"
-                placeholder="Min"
+                placeholder={t('products.min')}
               />
               <span className="text-gray-500">-</span>
               <input
@@ -159,7 +161,7 @@ const ProductsPage = () => {
                 value={filters.maxPrice}
                 onChange={handleFilterChange}
                 className="form-input"
-                placeholder="Max"
+                placeholder={t('products.max')}
               />
             </div>
           </div>
@@ -170,7 +172,7 @@ const ProductsPage = () => {
               htmlFor="sort"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Sort By
+              {t('products.sort_by')}
             </label>
             <select
               name="sort"
@@ -179,10 +181,10 @@ const ProductsPage = () => {
               onChange={handleFilterChange}
               className="form-input"
             >
-              <option value="">Default</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="name-asc">Name: A to Z</option>
+              <option value="">{t('products.default')}</option>
+              <option value="price-asc">{t('products.price_low_high')}</option>
+              <option value="price-desc">{t('products.price_high_low')}</option>
+              <option value="name-asc">{t('products.name_a_z')}</option>
             </select>
           </div>
 
@@ -197,7 +199,7 @@ const ProductsPage = () => {
                 className="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500"
               />
               <span className="text-sm font-medium text-gray-700">
-                Organic Only
+                {t('products.organic_only')}
               </span>
             </label>
           </div>
@@ -207,7 +209,7 @@ const ProductsPage = () => {
             onClick={handleResetFilters}
             className="btn btn-outline text-sm"
           >
-            Reset All Filters
+            {t('products.reset_filters')}
           </button>
         </div>
       </div>
@@ -226,10 +228,10 @@ const ProductsPage = () => {
           ) : (
             <div className="text-center py-16">
               <h3 className="text-2xl font-semibold text-gray-700">
-                No Products Found
+                {t('products.no_products')}
               </h3>
               <p className="text-gray-500 mt-2">
-                Try adjusting your filters or check back later!
+                {t('products.no_products_desc')}
               </p>
             </div>
           )}

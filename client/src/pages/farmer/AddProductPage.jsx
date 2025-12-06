@@ -52,6 +52,36 @@ const AddProductPage = () => {
     }
   }, [success, dispatch, navigate]);
 
+  const [priceSuggestion, setPriceSuggestion] = useState(null);
+
+  // Smart Price Suggestion Effect
+  useEffect(() => {
+    const fetchSuggestion = async () => {
+      if (!formData.name && !formData.category) return;
+      try {
+        // Simple debounce replacement/timeout could be better but this is fine for now
+        // Or only fetch if name length > 3
+        if (formData.name.length < 3) return;
+
+        // We use axios directly here for simplicity (avoiding redux overhead for this helper)
+        // or create a separate service function.
+        // Using axios here directly:
+        const response = await import("axios").then(mod => mod.default.get(
+          `${import.meta.env.VITE_API_URL}/recommendations/price-suggestion?name=${formData.name}&category=${formData.category}`
+        ));
+
+        if (response.data && response.data.data) {
+          setPriceSuggestion(response.data.data);
+        }
+      } catch (error) {
+        console.log("Price suggestion error:", error);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchSuggestion, 800);
+    return () => clearTimeout(timeoutId);
+  }, [formData.name, formData.category]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -242,6 +272,13 @@ const AddProductPage = () => {
               </div>
               {errors.price && (
                 <p className="text-red-500 text-xs mt-1">{errors.price}</p>
+              )}
+              {/* Smart Price Suggestion */}
+              {priceSuggestion && (
+                <div className="mt-2 text-xs bg-blue-50 text-blue-700 p-2 rounded border border-blue-200 flex items-center animate-pulse">
+                  <span className="font-bold mr-1">💡 AI Tip:</span>
+                  Suggested price: {priceSuggestion.suggestedRange} / {formData.unit}
+                </div>
               )}
             </div>
 

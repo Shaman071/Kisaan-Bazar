@@ -11,8 +11,10 @@ import {
 } from "../redux/slices/messageSlice";
 import Loader from "../components/Loader";
 import { FaArrowLeft, FaPaperPlane } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const ConversationPage = () => {
+  const { t } = useTranslation();
   const { userId } = useParams();
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
@@ -68,7 +70,7 @@ const ConversationPage = () => {
         className="flex items-center text-green-500 hover:text-green-700 mb-6"
       >
         <FaArrowLeft className="mr-2" />
-        Back to Messages
+        {t('messages.back', 'Back to Messages')}
       </Link>
 
       <div className="glass rounded-xl overflow-hidden">
@@ -89,21 +91,21 @@ const ConversationPage = () => {
                 <div
                   key={message._id}
                   className={`flex ${message.sender._id === user._id
-                      ? "justify-end"
-                      : "justify-start"
+                    ? "justify-end"
+                    : "justify-start"
                     }`}
                 >
                   <div
                     className={`max-w-[70%] rounded-lg p-3 ${message.sender._id === user._id
-                        ? "bg-green-500 text-white rounded-tr-none"
-                        : "bg-white border border-gray-200 rounded-tl-none"
+                      ? "bg-green-500 text-white rounded-tr-none"
+                      : "bg-white border border-gray-200 rounded-tl-none"
                       }`}
                   >
                     <p className="mb-1">{message.content}</p>
                     <p
                       className={`text-xs ${message.sender._id === user._id
-                          ? "text-green-100"
-                          : "text-gray-500"
+                        ? "text-green-100"
+                        : "text-gray-500"
                         } text-right`}
                     >
                       {formatTime(message.createdAt)}
@@ -116,7 +118,7 @@ const ConversationPage = () => {
           ) : (
             <div className="h-full flex items-center justify-center">
               <p className="text-gray-500">
-                No messages yet. Start the conversation!
+                {t('messages.start_conversation', 'No messages yet. Start the conversation!')}
               </p>
             </div>
           )}
@@ -129,7 +131,7 @@ const ConversationPage = () => {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               className="form-input flex-grow"
-              placeholder="Type your message..."
+              placeholder={t('messages.type_placeholder', 'Type your message...')}
             />
             <button
               type="submit"

@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { FaMapMarkerAlt, FaLeaf, FaCheckCircle, FaShieldAlt, FaStar } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const FarmerCard = ({ farmer }) => {
+  const { t } = useTranslation();
   // Check profile data if available (it should be now)
   const { profile } = farmer;
   const isTrusted = profile?.averageRating >= 4.5 && profile?.numReviews > 10;
@@ -19,7 +21,7 @@ const FarmerCard = ({ farmer }) => {
               )}
             </div>
             {profile?.isVerified && (
-              <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5" title="Verified Farmer">
+              <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5" title={t('farmers.verified', 'Verified Farmer')}>
                 <FaCheckCircle className="text-green-500 text-lg" />
               </div>
             )}
@@ -27,7 +29,7 @@ const FarmerCard = ({ farmer }) => {
           <div>
             <h3 className="text-xl font-semibold flex items-center">
               {farmer.name}
-              {isTrusted && <FaShieldAlt className="text-blue-500 ml-2 text-sm" title="Trusted Farmer" />}
+              {isTrusted && <FaShieldAlt className="text-blue-500 ml-2 text-sm" title={t('farmers.trusted', 'Trusted Farmer')} />}
             </h3>
             <div className="flex items-center text-yellow-500 text-sm mb-1">
               <span className="font-bold mr-1">{profile?.averageRating?.toFixed(1) || "0.0"}</span>
@@ -49,7 +51,7 @@ const FarmerCard = ({ farmer }) => {
           to={`/farmers/${farmer._id}`}
           className="block w-full bg-green-500 text-white text-center py-2 rounded-lg hover:bg-green-600 transition-colors"
         >
-          View Farm
+          {t('farmers.view_farm', 'View Farm')}
         </Link>
       </div>
     </div>

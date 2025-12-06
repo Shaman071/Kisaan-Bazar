@@ -72,4 +72,7 @@ const ProductSchema = new mongoose.Schema(
   }
 );
 
+// Add text index for intelligent search
+ProductSchema.index({ name: "text", description: "text" });
+
 module.exports = mongoose.model("Product", ProductSchema);

@@ -13,8 +13,10 @@ import {
   FaLeaf,
   FaCheck,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const ProfilePage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.auth);
   const {
@@ -128,6 +130,24 @@ const ProfilePage = () => {
     }
   }, [user, myFarmerProfile]);
 
+  const [spendingAnalytics, setSpendingAnalytics] = useState(null);
+
+  useEffect(() => {
+    if (user?.role === 'consumer' && activeTab === 'insights' && !spendingAnalytics) {
+      const fetchAnalytics = async () => {
+        try {
+          const token = user.token || JSON.parse(localStorage.getItem('userInfo'))?.token;
+          const { data } = await import("axios").then(m => m.default.get(
+            `${import.meta.env.VITE_API_URL}/analytics/consumer`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          ));
+          if (data.success) setSpendingAnalytics(data);
+        } catch (e) { console.error(e); }
+      };
+      fetchAnalytics();
+    }
+  }, [user, activeTab, spendingAnalytics]);
+
   const handleUserChange = (e) => {
     const { name, value } = e.target;
 
@@ -228,36 +248,45 @@ const ProfilePage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">My Profile</h1>
+      <h1 className="text-3xl font-bold mb-8">{t('profile.title', 'My Profile')}</h1>
 
-      <div className="flex border-b border-gray-200 mb-8">
+      <div className="flex border-b border-gray-200 mb-8 overflow-x-auto">
         <button
-          className={`py-2 px-4 font-medium ${
-            activeTab === "general"
-              ? "text-green-500 border-b-2 border-green-500"
-              : "text-gray-500"
-          }`}
+          className={`py-2 px-4 font-medium whitespace-nowrap ${activeTab === "general"
+            ? "text-green-500 border-b-2 border-green-500"
+            : "text-gray-500"
+            }`}
           onClick={() => setActiveTab("general")}
         >
-          General Information
+          {t('profile.tabs.general', 'General Information')}
         </button>
         {user?.role === "farmer" && (
           <button
-            className={`py-2 px-4 font-medium ${
-              activeTab === "farm"
-                ? "text-green-500 border-b-2 border-green-500"
-                : "text-gray-500"
-            }`}
+            className={`py-2 px-4 font-medium whitespace-nowrap ${activeTab === "farm"
+              ? "text-green-500 border-b-2 border-green-500"
+              : "text-gray-500"
+              }`}
             onClick={() => setActiveTab("farm")}
           >
-            Farm Profile
+            {t('profile.tabs.farm', 'Farm Profile')}
+          </button>
+        )}
+        {user?.role === "consumer" && (
+          <button
+            className={`py-2 px-4 font-medium whitespace-nowrap ${activeTab === "insights"
+              ? "text-green-500 border-b-2 border-green-500"
+              : "text-gray-500"
+              }`}
+            onClick={() => setActiveTab("insights")}
+          >
+            {t('profile.tabs.insights', 'Spending Insights')} 🧠
           </button>
         )}
       </div>
 
       {activeTab === "general" && (
         <div className="glass p-6 rounded-xl">
-          <h2 className="text-xl font-semibold mb-6">General Information</h2>
+          <h2 className="text-xl font-semibold mb-6">{t('profile.general.title', 'General Information')}</h2>
 
           <form onSubmit={handleUserSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -266,7 +295,7 @@ const ProfilePage = () => {
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Full Name
+                  {t('profile.general.full_name', 'Full Name')}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -289,7 +318,7 @@ const ProfilePage = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Email Address
+                  {t('profile.general.email', 'Email Address')}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -304,7 +333,7 @@ const ProfilePage = () => {
                   />
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  Email cannot be changed
+                  {t('profile.general.email_hint', 'Email cannot be changed')}
                 </p>
               </div>
 
@@ -313,7 +342,7 @@ const ProfilePage = () => {
                   htmlFor="phone"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Phone Number
+                  {t('profile.general.phone', 'Phone Number')}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -335,7 +364,7 @@ const ProfilePage = () => {
                   htmlFor="role"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Account Type
+                  {t('profile.general.account_type', 'Account Type')}
                 </label>
                 <input
                   type="text"
@@ -352,7 +381,7 @@ const ProfilePage = () => {
             </div>
 
             <div className="mb-6">
-              <h3 className="text-lg font-medium mb-3">Address</h3>
+              <h3 className="text-lg font-medium mb-3">{t('profile.general.address', 'Address')}</h3>
               <div className="grid grid-cols-1 gap-4">
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -364,7 +393,7 @@ const ProfilePage = () => {
                     value={userForm.address.street}
                     onChange={handleUserChange}
                     className="form-input pl-10 block w-full"
-                    placeholder="Street address"
+                    placeholder={t('profile.general.street', 'Street address')}
                   />
                 </div>
 
@@ -375,7 +404,7 @@ const ProfilePage = () => {
                     value={userForm.address.city}
                     onChange={handleUserChange}
                     className="form-input block w-full pl-3"
-                    placeholder="City"
+                    placeholder={t('profile.general.city', 'City')}
                   />
                   <input
                     type="text"
@@ -383,7 +412,7 @@ const ProfilePage = () => {
                     value={userForm.address.state}
                     onChange={handleUserChange}
                     className="form-input block w-full pl-3"
-                    placeholder="State"
+                    placeholder={t('profile.general.state', 'State')}
                   />
                 </div>
 
@@ -393,7 +422,7 @@ const ProfilePage = () => {
                   value={userForm.address.zipCode}
                   onChange={handleUserChange}
                   className="form-input block w-full pl-3"
-                  placeholder="ZIP / Postal code"
+                  placeholder={t('profile.general.zip', 'ZIP / Postal code')}
                 />
               </div>
             </div>
@@ -403,7 +432,7 @@ const ProfilePage = () => {
               className="btn btn-primary"
               disabled={loading}
             >
-              {loading ? "Saving..." : "Save Changes"}
+              {loading ? t('profile.general.saving', 'Saving...') : t('profile.general.save', 'Save Changes')}
             </button>
           </form>
         </div>
@@ -411,7 +440,7 @@ const ProfilePage = () => {
 
       {activeTab === "farm" && user?.role === "farmer" && (
         <div className="glass p-6 rounded-xl">
-          <h2 className="text-xl font-semibold mb-6">Farm Profile</h2>
+          <h2 className="text-xl font-semibold mb-6">{t('profile.farm.title', 'Farm Profile')}</h2>
 
           <form onSubmit={handleFarmerSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -420,7 +449,7 @@ const ProfilePage = () => {
                   htmlFor="farmName"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Farm Name
+                  {t('profile.farm.name', 'Farm Name')}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -443,7 +472,7 @@ const ProfilePage = () => {
                   htmlFor="establishedYear"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Established Year
+                  {t('profile.farm.established', 'Established Year')}
                 </label>
                 <input
                   type="number"
@@ -451,7 +480,7 @@ const ProfilePage = () => {
                   name="establishedYear"
                   value={
                     farmerForm.establishedYear === "" ||
-                    Number.isNaN(Number(farmerForm.establishedYear))
+                      Number.isNaN(Number(farmerForm.establishedYear))
                       ? ""
                       : farmerForm.establishedYear
                   }
@@ -468,7 +497,7 @@ const ProfilePage = () => {
                 htmlFor="description"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Farm Description
+                {t('profile.farm.description', 'Farm Description')}
               </label>
               <textarea
                 id="description"
@@ -477,14 +506,14 @@ const ProfilePage = () => {
                 value={farmerForm.description}
                 onChange={handleFarmerChange}
                 className="form-input block w-full pl-3"
-                placeholder="Tell customers about your farm..."
+                placeholder={t('profile.farm.description_placeholder', 'Tell customers about your farm...')}
                 required
               ></textarea>
             </div>
 
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Farming Practices
+                {t('profile.farm.practices', 'Farming Practices')}
               </label>
               <div className="flex space-x-2 mb-2">
                 <input
@@ -492,14 +521,14 @@ const ProfilePage = () => {
                   value={farmingPractice}
                   onChange={(e) => setFarmingPractice(e.target.value)}
                   className="form-input flex-grow pl-3"
-                  placeholder="e.g., Organic, No-till, Permaculture"
+                  placeholder={t('profile.farm.practices_hint', 'e.g., Organic, No-till, Permaculture')}
                 />
                 <button
                   type="button"
                   onClick={handleAddFarmingPractice}
                   className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
                 >
-                  Add
+                  {t('profile.farm.add', 'Add')}
                 </button>
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
@@ -522,7 +551,7 @@ const ProfilePage = () => {
             </div>
 
             <div className="mb-6">
-              <h3 className="text-lg font-medium mb-3">Social Media</h3>
+              <h3 className="text-lg font-medium mb-3">{t('profile.farm.social', 'Social Media')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label
@@ -579,7 +608,7 @@ const ProfilePage = () => {
             </div>
 
             <div className="mb-6">
-              <h3 className="text-lg font-medium mb-3">Business Hours</h3>
+              <h3 className="text-lg font-medium mb-3">{t('profile.farm.hours', 'Business Hours')}</h3>
               <div className="grid grid-cols-1 gap-4">
                 {Object.entries(farmerForm.businessHours).map(
                   ([day, hours]) => (
@@ -613,7 +642,7 @@ const ProfilePage = () => {
             </div>
 
             <div className="mb-6">
-              <h3 className="text-lg font-medium mb-3">Order Options</h3>
+              <h3 className="text-lg font-medium mb-3">{t('profile.farm.options', 'Order Options')}</h3>
               <div className="space-y-4">
                 <div className="flex items-center">
                   <input
@@ -628,7 +657,7 @@ const ProfilePage = () => {
                     htmlFor="acceptsPickup"
                     className="ml-2 block text-sm text-gray-900"
                   >
-                    Accepts Pickup Orders
+                    {t('profile.farm.pickup', 'Accepts Pickup Orders')}
                   </label>
                 </div>
 
@@ -645,7 +674,7 @@ const ProfilePage = () => {
                     htmlFor="acceptsDelivery"
                     className="ml-2 block text-sm text-gray-900"
                   >
-                    Offers Delivery
+                    {t('profile.farm.delivery', 'Offers Delivery')}
                   </label>
                 </div>
 
@@ -655,7 +684,7 @@ const ProfilePage = () => {
                       htmlFor="deliveryRadius"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      Delivery Radius (miles)
+                      {t('profile.farm.radius', 'Delivery Radius (miles)')}
                     </label>
                     <input
                       type="number"
@@ -663,7 +692,7 @@ const ProfilePage = () => {
                       name="deliveryRadius"
                       value={
                         farmerForm.deliveryRadius === "" ||
-                        Number.isNaN(Number(farmerForm.deliveryRadius))
+                          Number.isNaN(Number(farmerForm.deliveryRadius))
                           ? ""
                           : farmerForm.deliveryRadius
                       }
@@ -681,16 +710,53 @@ const ProfilePage = () => {
               className="btn btn-primary"
               disabled={farmerLoading}
             >
-              {farmerLoading ? "Saving..." : "Save Farm Profile"}
+              {farmerLoading ? t('profile.general.saving', 'Saving...') : t('profile.farm.save', 'Save Farm Profile')}
             </button>
 
             {farmerSuccess && (
               <div className="mt-4 flex items-center text-green-600">
                 <FaCheck className="mr-2" />
-                <span>Farm profile updated successfully!</span>
+                <span>{t('profile.farm.success', 'Farm profile updated successfully!')}</span>
               </div>
             )}
           </form>
+        </div>
+      )}
+
+      {activeTab === "insights" && user?.role === "consumer" && (
+        <div className="glass p-6 rounded-xl">
+          <h2 className="text-xl font-semibold mb-6 flex items-center">
+            {t('profile.insights.title', 'My Spending Habits')} <span className="ml-2 text-sm bg-purple-100 text-purple-800 px-2 py-1 rounded-full">{t('profile.insights.ai_analysis', 'AI Analysis')}</span>
+          </h2>
+
+          {spendingAnalytics ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-green-50 p-6 rounded-lg text-center">
+                <h3 className="text-gray-600 font-medium mb-2">{t('profile.insights.total_spent', 'Total Spent')}</h3>
+                <p className="text-3xl font-bold text-green-700">₨{spendingAnalytics.spending.totalSpend.toFixed(2)}</p>
+                <p className="text-xs text-green-600 mt-1">{t('profile.insights.across_orders', { count: spendingAnalytics.spending.totalOrders, defaultValue: `Across ${spendingAnalytics.spending.totalOrders} orders` })}</p>
+              </div>
+              <div className="bg-blue-50 p-6 rounded-lg text-center">
+                <h3 className="text-gray-600 font-medium mb-2">{t('profile.insights.favorite_item', 'Favorite Item')}</h3>
+                {spendingAnalytics.favoriteItem ? (
+                  <>
+                    <p className="text-xl font-bold text-blue-700">{spendingAnalytics.favoriteItem._id}</p>
+                    <p className="text-xs text-blue-600 mt-1">{t('profile.insights.bought_times', { count: spendingAnalytics.favoriteItem.qty, defaultValue: `Bought ${spendingAnalytics.favoriteItem.qty} times` })}</p>
+                  </>
+                ) : <p className="text-gray-400">{t('profile.insights.not_enough_data', 'Not enough data')}</p>}
+              </div>
+              <div className="bg-orange-50 p-6 rounded-lg text-center">
+                <h3 className="text-gray-600 font-medium mb-2">{t('profile.insights.community_impact', 'Community Impact')}</h3>
+                <p className="text-3xl font-bold text-orange-700">{spendingAnalytics.farmersSupported}</p>
+                <p className="text-xs text-orange-600 mt-1">{t('profile.insights.farmers_supported', 'Farmers Supported')}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-10">
+              <Loader />
+              <p className="mt-2 text-gray-500">{t('profile.insights.analyzing', 'Analyzing your purchase history...')}</p>
+            </div>
+          )}
         </div>
       )}
     </div>

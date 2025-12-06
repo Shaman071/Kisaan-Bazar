@@ -17,10 +17,12 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const OrderDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -111,7 +113,7 @@ const OrderDetailPage = () => {
         className="inline-flex items-center text-green-600 hover:text-green-700 mb-8 transition-colors duration-200"
       >
         <FaArrowLeft className="mr-2" />
-        Back to Orders
+        {t('orders.back_to_orders', 'Back to Orders')}
       </Link>
 
       <div className="bg-white shadow-lg rounded-2xl mb-8 overflow-hidden">
@@ -119,10 +121,10 @@ const OrderDetailPage = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold mb-3 text-gray-800">
-                Order #{order._id.substring(0, 8)}
+                {t('orders.order_id', 'Order')} #{order._id.substring(0, 8)}
               </h1>
               <p className="text-gray-500">
-                Placed on {formatDate(order.createdAt)}
+                {t('orders.placed_on', 'Placed on')} {formatDate(order.createdAt)}
               </p>
             </div>
             <div className="mt-4 md:mt-0">
@@ -131,7 +133,7 @@ const OrderDetailPage = () => {
                   order.status
                 )}`}
               >
-                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                {t(`orders.${order.status}`, order.status)}
               </span>
             </div>
           </div>
@@ -139,24 +141,24 @@ const OrderDetailPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div className="bg-gray-50 p-6 rounded-xl">
               <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                Order Details
+                {t('checkout.order_details', 'Order Details')}
               </h2>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total Amount:</span>
+                  <span className="text-gray-600">{t('orders.total_amount', 'Total Amount')}:</span>
                   <span className="font-bold text-lg text-gray-800">
                     ₹{order.totalAmount.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Payment Method:</span>
+                  <span className="text-gray-600">{t('checkout.payment_method', 'Payment Method')}:</span>
                   <span className="capitalize font-medium text-gray-800">
-                    {order.paymentMethod.replace("_", " ")}
+                    {t(`checkout.${order.paymentMethod}`, order.paymentMethod.replace("_", " "))}
                   </span>
                 </div>
                 {order.notes && (
                   <div className="mt-4">
-                    <span className="text-gray-600 block mb-2">Notes:</span>
+                    <span className="text-gray-600 block mb-2">{t('checkout.order_notes', 'Notes')}:</span>
                     <p className="text-gray-700 bg-white p-3 rounded-lg border border-gray-200">
                       {order.notes}
                     </p>
@@ -168,8 +170,8 @@ const OrderDetailPage = () => {
             <div className="bg-gray-50 p-6 rounded-xl">
               <h2 className="text-xl font-semibold mb-4 text-gray-800">
                 {order.pickupDetails && order.pickupDetails.location
-                  ? "Pickup Details"
-                  : "Delivery Details"}
+                  ? t('checkout.pickup_details', 'Pickup Details')
+                  : t('checkout.delivery_details', 'Delivery Details')}
               </h2>
               {order.pickupDetails && order.pickupDetails.location ? (
                 <div className="space-y-4">
@@ -230,7 +232,7 @@ const OrderDetailPage = () => {
                 </div>
               ) : (
                 <p className="text-gray-500 italic">
-                  No delivery/pickup details provided
+                  {t('orders.no_details', 'No delivery/pickup details provided')}
                 </p>
               )}
             </div>
@@ -239,7 +241,7 @@ const OrderDetailPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-gray-50 p-6 rounded-xl">
               <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                Customer Information
+                {t('orders.customer_info', 'Customer Information')}
               </h2>
               <div className="space-y-2">
                 <p className="font-medium text-gray-800">
@@ -254,7 +256,7 @@ const OrderDetailPage = () => {
 
             <div className="bg-gray-50 p-6 rounded-xl">
               <h2 className="text-xl font-semibold mb-4 text-gray-800">
-                Farmer Information
+                {t('orders.farmer_info', 'Farmer Information')}
               </h2>
               <div className="space-y-2">
                 <p className="font-medium text-gray-800">{order.farmer.name}</p>
@@ -271,23 +273,23 @@ const OrderDetailPage = () => {
       <div className="bg-white shadow-lg rounded-2xl mb-8 overflow-hidden">
         <div className="p-8">
           <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-            Order Items
+            {t('orders.order_items', 'Order Items')}
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-4 px-4 text-gray-600 font-semibold">
-                    Product
+                    {t('orders.product', 'Product')}
                   </th>
                   <th className="text-center py-4 px-4 text-gray-600 font-semibold">
-                    Price
+                    {t('orders.price', 'Price')}
                   </th>
                   <th className="text-center py-4 px-4 text-gray-600 font-semibold">
-                    Quantity
+                    {t('orders.quantity', 'Quantity')}
                   </th>
                   <th className="text-right py-4 px-4 text-gray-600 font-semibold">
-                    Total
+                    {t('orders.total', 'Total')}
                   </th>
                 </tr>
               </thead>
@@ -338,7 +340,7 @@ const OrderDetailPage = () => {
                     colSpan="3"
                     className="text-right py-4 px-4 font-bold text-gray-800"
                   >
-                    Total:
+                    {t('orders.total', 'Total')}:
                   </td>
                   <td className="text-right py-4 px-4 font-bold text-gray-800">
                     ₹{order.totalAmount.toFixed(2)}
@@ -354,7 +356,7 @@ const OrderDetailPage = () => {
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden">
           <div className="p-8">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-              Contact {user.role === "consumer" ? "Farmer" : "Customer"}
+              {t('orders.send_message', 'Send Message')} {user.role === "consumer" ? t('nav.farmers', 'Farmer') : t('orders.customer', 'Customer')}
             </h2>
             {showMessageForm ? (
               <form onSubmit={handleSendMessage} className="space-y-4">
@@ -362,8 +364,7 @@ const OrderDetailPage = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
-                  placeholder={`Write your message to the ${user.role === "consumer" ? "farmer" : "customer"
-                    }...`}
+                  placeholder={t('orders.write_message_placeholder', 'Write your message...')}
                   rows="4"
                   required
                 ></textarea>
@@ -372,14 +373,14 @@ const OrderDetailPage = () => {
                     type="submit"
                     className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors duration-200"
                   >
-                    Send Message
+                    {t('orders.send_message', 'Send Message')}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowMessageForm(false)}
                     className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
                   >
-                    Cancel
+                    {t('orders.cancel', 'Cancel')}
                   </button>
                 </div>
               </form>
@@ -390,8 +391,7 @@ const OrderDetailPage = () => {
               >
                 <FaComment className="text-xl" />
                 <span className="font-medium">
-                  Send a message about this order to the{" "}
-                  {user.role === "consumer" ? "farmer" : "customer"}
+                  {t('orders.send_message_desc', 'Send a message about this order')}
                 </span>
               </button>
             )}
@@ -399,14 +399,13 @@ const OrderDetailPage = () => {
         </div>
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden">
           <div className="p-8">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800">Actions</h2>
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800">Actions</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800">{t('orders.actions', 'Actions')}</h2>
             <button
               onClick={handleDownloadInvoice}
               className="w-full flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200"
             >
               <FaFileInvoice />
-              <span>Download Invoice (PDF)</span>
+              <span>{t('orders.download_invoice', 'Download Invoice (PDF)')}</span>
             </button>
           </div>
         </div>

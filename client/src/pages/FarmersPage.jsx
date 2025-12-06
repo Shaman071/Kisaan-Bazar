@@ -7,7 +7,10 @@ import FarmerCard from "../components/FarmerCard";
 import Loader from "../components/Loader";
 import { FaSearch, FaLeaf } from "react-icons/fa";
 
+import { useTranslation } from "react-i18next";
+
 const FarmersPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { farmers, loading } = useSelector((state) => state.farmers);
 
@@ -38,7 +41,7 @@ const FarmersPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Our Farmers</h1>
+      <h1 className="text-3xl font-bold mb-8">{t('farmers.title')}</h1>
 
       <div className="mb-8">
         <div className="relative max-w-md mx-auto">
@@ -46,7 +49,7 @@ const FarmersPage = () => {
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
-            placeholder="Search farmers..."
+            placeholder={t('farmers.search_placeholder')}
             className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -64,8 +67,8 @@ const FarmersPage = () => {
       ) : (
         <div className="text-center py-12">
           <FaLeaf className="text-green-500 text-5xl mx-auto mb-4" />
-          <h3 className="text-xl font-semibold mb-2">No Farmers Found</h3>
-          <p className="text-gray-600">Try adjusting your search criteria.</p>
+          <h3 className="text-xl font-semibold mb-2">{t('farmers.no_farmers')}</h3>
+          <p className="text-gray-600">{t('farmers.no_farmers_desc')}</p>
         </div>
       )}
     </div>

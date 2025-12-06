@@ -28,8 +28,10 @@ import {
   FaCheckCircle,
   FaShieldAlt,
 } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const FarmerDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -79,6 +81,7 @@ const FarmerDetailPage = () => {
 
     setMessage("");
     setShowMessageForm(false);
+    alert(t('farmers.message_sent', 'Message sent successfully!'));
   };
 
   const handleSubmitReview = (e) => {
@@ -103,13 +106,13 @@ const FarmerDetailPage = () => {
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
           role="alert"
         >
-          <span className="block sm:inline">Farmer not found</span>
+          <span className="block sm:inline">{t('farmers.not_found', 'Farmer not found')}</span>
         </div>
         <Link
           to="/farmers"
           className="mt-4 inline-block text-green-500 hover:text-green-700"
         >
-          Back to Farmers
+          {t('farmers.back_to_farmers', 'Back to Farmers')}
         </Link>
       </div>
     );
@@ -125,7 +128,7 @@ const FarmerDetailPage = () => {
         className="flex items-center text-green-500 hover:text-green-700 mb-6"
       >
         <FaArrowLeft className="mr-2" />
-        Back to Farmers
+        {t('farmers.back_to_farmers', 'Back to Farmers')}
       </Link>
 
       <div className="glass p-6 rounded-xl mb-8">
@@ -142,19 +145,19 @@ const FarmerDetailPage = () => {
             <div className="flex space-x-2">
               {profile?.isVerified && (
                 <span className="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center">
-                  <FaCheckCircle className="mr-1" /> Verified
+                  <FaCheckCircle className="mr-1" /> {t('farmers.verified', 'Verified')}
                 </span>
               )}
               {isTrusted && (
                 <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded flex items-center">
-                  <FaShieldAlt className="mr-1" /> Trusted
+                  <FaShieldAlt className="mr-1" /> {t('farmers.trusted', 'Trusted')}
                 </span>
               )}
             </div>
             <div className="flex items-center mt-2 text-yellow-500">
               <span className="font-bold text-lg mr-1">{profile?.averageRating?.toFixed(1) || "0.0"}</span>
               <FaStar />
-              <span className="text-gray-500 text-sm ml-1">({profile?.numReviews || 0} reviews)</span>
+              <span className="text-gray-500 text-sm ml-1">({profile?.numReviews || 0} {t('farmers.reviews', 'reviews')})</span>
             </div>
 
           </div>
@@ -190,7 +193,7 @@ const FarmerDetailPage = () => {
             {profile?.establishedYear && (
               <div className="flex items-center text-gray-600 mb-4">
                 <FaCalendarAlt className="text-green-500 mr-2" />
-                <span>Established in {profile.establishedYear}</span>
+                <span>{t('farmers.established', 'Established in')} {profile.establishedYear}</span>
               </div>
             )}
 
@@ -237,20 +240,20 @@ const FarmerDetailPage = () => {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       className="form-input mb-2"
-                      placeholder="Write your message here..."
+                      placeholder={t('farmers.write_message', 'Write your message here...')}
                       rows="3"
                       required
                     ></textarea>
                     <div className="flex space-x-2">
                       <button type="submit" className="btn btn-primary">
-                        Send Message
+                        {t('farmers.send_message', 'Send Message')}
                       </button>
                       <button
                         type="button"
                         onClick={() => setShowMessageForm(false)}
                         className="btn btn-outline"
                       >
-                        Cancel
+                        {t('common.cancel', 'Cancel')}
                       </button>
                     </div>
                   </form>
@@ -260,7 +263,7 @@ const FarmerDetailPage = () => {
                     className="flex items-center space-x-2 text-green-500 hover:text-green-700"
                   >
                     <FaComment />
-                    <span>Message Farmer</span>
+                    <span>{t('farmers.message_farmer', 'Message Farmer')}</span>
                   </button>
                 )}
               </div>
@@ -272,13 +275,13 @@ const FarmerDetailPage = () => {
       {/* Reviews Section */}
       <div className="glass p-6 rounded-xl mb-8">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Reviews & Ratings</h2>
+          <h2 className="text-2xl font-bold">{t('farmers.reviews_ratings', 'Reviews & Ratings')}</h2>
           {isAuthenticated && user?.role !== "farmer" && !showReviewForm && (
             <button
               onClick={() => setShowReviewForm(true)}
               className="btn btn-outline text-sm"
             >
-              Write a Review
+              {t('farmers.write_review', 'Write a Review')}
             </button>
           )}
         </div>
@@ -286,7 +289,7 @@ const FarmerDetailPage = () => {
         {showReviewForm && (
           <form onSubmit={handleSubmitReview} className="mb-8 bg-gray-50 p-4 rounded-lg">
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('farmers.rating', 'Rating')}</label>
               <div className="flex space-x-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -301,19 +304,19 @@ const FarmerDetailPage = () => {
               </div>
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Comment</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('farmers.comment', 'Comment')}</label>
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 className="form-input"
                 rows="3"
                 required
-                placeholder="Share your experience..."
+                placeholder={t('farmers.review_placeholder', 'Share your experience...')}
               ></textarea>
             </div>
             <div className="flex space-x-3">
-              <button type="submit" className="btn btn-primary">Submit Review</button>
-              <button type="button" onClick={() => setShowReviewForm(false)} className="btn btn-ghost">Cancel</button>
+              <button type="submit" className="btn btn-primary">{t('farmers.submit_review', 'Submit Review')}</button>
+              <button type="button" onClick={() => setShowReviewForm(false)} className="btn btn-ghost">{t('common.cancel', 'Cancel')}</button>
             </div>
           </form>
         )}
@@ -345,7 +348,7 @@ const FarmerDetailPage = () => {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 italic">No reviews yet. Be the first to review!</p>
+          <p className="text-gray-500 italic">{t('farmers.no_reviews', 'No reviews yet. Be the first to review!')}</p>
         )}
       </div>
 
@@ -353,7 +356,7 @@ const FarmerDetailPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {profile.farmingPractices && profile.farmingPractices.length > 0 && (
             <div className="glass p-6 rounded-xl">
-              <h2 className="text-xl font-semibold mb-4">Farming Practices</h2>
+              <h2 className="text-xl font-semibold mb-4">{t('farmers.farming_practices', 'Farming Practices')}</h2>
               <ul className="space-y-2">
                 {profile.farmingPractices.map((practice, index) => (
                   <li key={index} className="flex items-start">
@@ -367,7 +370,7 @@ const FarmerDetailPage = () => {
 
           {profile.businessHours && (
             <div className="glass p-6 rounded-xl">
-              <h2 className="text-xl font-semibold mb-4">Business Hours</h2>
+              <h2 className="text-xl font-semibold mb-4">{t('farmers.business_hours', 'Business Hours')}</h2>
               <div className="space-y-2">
                 {Object.entries(profile.businessHours).map(
                   ([day, hours]) =>
@@ -388,7 +391,7 @@ const FarmerDetailPage = () => {
       )}
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-6">Available Products</h2>
+        <h2 className="text-2xl font-bold mb-6">{t('farmers.available_products', 'Available Products')}</h2>
 
         {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -400,10 +403,10 @@ const FarmerDetailPage = () => {
           <div className="text-center py-8 glass rounded-xl">
             <FaLeaf className="text-green-500 text-4xl mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-2">
-              No Products Available
+              {t('farmers.no_products', 'No Products Available')}
             </h3>
             <p className="text-gray-600">
-              This farmer doesn't have any products listed at the moment.
+              {t('farmers.no_products_desc', "This farmer doesn't have any products listed at the moment.")}
             </p>
           </div>
         )}

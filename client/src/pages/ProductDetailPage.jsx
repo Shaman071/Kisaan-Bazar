@@ -20,7 +20,10 @@ import {
 } from "react-icons/fa";
 import { placeholder } from "../assets";
 
+import { useTranslation } from "react-i18next";
+
 const ProductDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,14 +57,14 @@ const ProductDetailPage = () => {
     }
 
     if (user.role === "farmer") {
-      alert("Farmers cannot place orders. Please use a consumer account.");
+      alert(t('products.farmer_alert'));
       return;
     }
 
     if (farmerId && farmerId !== product.farmer._id && cartItems.length > 0) {
       if (
         !confirm(
-          "Your cart contains items from a different farm. Would you like to clear your cart and add this item?"
+          t('products.cart_alert')
         )
       ) {
         return;
@@ -116,7 +119,7 @@ const ProductDetailPage = () => {
           to="/products"
           className="mt-4 inline-block text-green-500 hover:text-green-700"
         >
-          Back to Products
+          {t('products.back_to_products')}
         </Link>
       </div>
     );
@@ -133,7 +136,7 @@ const ProductDetailPage = () => {
         className="flex items-center text-green-500 hover:text-green-700 mb-6"
       >
         <FaArrowLeft className="mr-2" />
-        Back to Products
+        {t('products.back_to_products')}
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -182,10 +185,10 @@ const ProductDetailPage = () => {
 
           <div className="flex items-center mb-4">
             <span className="text-gray-600 mr-4">
-              Category: {product.category?.name || "General"}
+              {t('products.category_label')}: {product.category?.name || t('products.general')}
             </span>
             {product.isOrganic && (
-              <span className="badge badge-green">Organic</span>
+              <span className="badge badge-green">{t('products.organic')}</span>
             )}
           </div>
 
@@ -198,7 +201,7 @@ const ProductDetailPage = () => {
           <div className="mb-6">
             <div className="flex items-center mb-2">
               <FaLeaf className="text-green-500 mr-2" />
-              <span className="font-medium">Available Quantity:</span>
+              <span className="font-medium">{t('products.available_qty')}:</span>
               <span className="ml-2">
                 {product.quantityAvailable} {product.unit}
               </span>
@@ -207,7 +210,7 @@ const ProductDetailPage = () => {
             {product.harvestDate && (
               <div className="flex items-center mb-2">
                 <FaLeaf className="text-green-500 mr-2" />
-                <span className="font-medium">Harvest Date:</span>
+                <span className="font-medium">{t('products.harvest_date')}:</span>
                 <span className="ml-2">
                   {new Date(product.harvestDate).toLocaleDateString()}
                 </span>
@@ -216,16 +219,16 @@ const ProductDetailPage = () => {
 
             {product.bulkDiscount && product.bulkDiscount.threshold > 0 && (
               <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-700 mb-1">Bulk Discount Available!</h4>
+                <h4 className="font-semibold text-green-700 mb-1">{t('products.bulk_discount')}</h4>
                 <p className="text-green-600 text-sm">
-                  Buy <strong>{product.bulkDiscount.threshold} {product.unit}</strong> or more and get <span className="font-bold">{product.bulkDiscount.discountPercent}% OFF</span>!
+                  {t('products.buy')} <strong>{product.bulkDiscount.threshold} {product.unit}</strong> {t('products.or_more_get')} <span className="font-bold">{product.bulkDiscount.discountPercent}% {t('products.off')}</span>!
                 </p>
               </div>
             )}
           </div>
 
           <div className="bg-gray-50 rounded-lg mb-6">
-            <h3 className="text-lg font-semibold mb-2">Farmer Information</h3>
+            <h3 className="text-lg font-semibold mb-2">{t('products.farmer_info')}</h3>
             <div className="flex items-center mb-2">
               <FaUser className="text-green-500 mr-2" />
               <span>{product.farmer?.name}</span>
@@ -242,7 +245,7 @@ const ProductDetailPage = () => {
               to={`/farmers/${product.farmer?._id}`}
               className="text-green-500 hover:text-green-700 font-medium"
             >
-              View Farm Profile
+              {t('products.view_farm')}
             </Link>
           </div>
 
@@ -253,7 +256,7 @@ const ProductDetailPage = () => {
                   htmlFor="quantity"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Quantity
+                  {t('products.quantity')}
                 </label>
                 <input
                   type="number"
@@ -277,8 +280,8 @@ const ProductDetailPage = () => {
                   <FaShoppingCart />
                   <span>
                     {product.quantityAvailable === 0
-                      ? "Out of Stock"
-                      : "Add to Cart"}
+                      ? t('products.out_of_stock')
+                      : t('products.add_to_cart')}
                   </span>
                 </button>
               </div>
@@ -293,7 +296,7 @@ const ProductDetailPage = () => {
                     htmlFor="message"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Message to Farmer
+                    {t('products.message_farmer')}
                   </label>
                   <textarea
                     id="message"
@@ -301,19 +304,19 @@ const ProductDetailPage = () => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     className="form-input mb-2 pl-3"
-                    placeholder="Ask a question about this product..."
+                    placeholder={t('products.ask_question')}
                     required
                   ></textarea>
                   <div className="flex space-x-2">
                     <button type="submit" className="btn btn-primary">
-                      Send Message
+                      {t('products.send_message')}
                     </button>
                     <button
                       type="button"
                       onClick={() => setShowMessageForm(false)}
                       className="btn btn-outline"
                     >
-                      Cancel
+                      {t('products.cancel')}
                     </button>
                   </div>
                 </form>
@@ -323,7 +326,7 @@ const ProductDetailPage = () => {
                   className="flex items-center space-x-2 text-green-500 hover:text-green-700"
                 >
                   <FaComment />
-                  <span c>Message Farmer</span>
+                  <span c>{t('products.message_farmer')}</span>
                 </button>
               )}
             </div>

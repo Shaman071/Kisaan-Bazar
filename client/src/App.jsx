@@ -10,6 +10,7 @@ import AdminRoute from "./components/AdminRoute";
 import FarmerRoute from "./components/FarmerRoute";
 import ConsumerRoute from "./components/ConsumerRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import AiSupportWidget from "./components/AiSupportWidget";
 
 // Public Pages
 import HomePage from "./pages/HomePage";
@@ -109,6 +110,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
+      <AiSupportWidget />
     </>
   );
 }

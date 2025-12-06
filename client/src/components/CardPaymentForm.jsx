@@ -1,6 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const CardPaymentForm = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
       <div>
@@ -8,7 +11,7 @@ const CardPaymentForm = () => {
           htmlFor="cardNumber"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-          Card Number
+          {t('card.number', 'Card Number')}
         </label>
         <input
           type="text"
@@ -25,7 +28,7 @@ const CardPaymentForm = () => {
             htmlFor="expiryDate"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Expiry Date
+            {t('card.expiry', 'Expiry Date')}
           </label>
           <input
             type="text"
@@ -41,7 +44,7 @@ const CardPaymentForm = () => {
             htmlFor="cvc"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            CVC
+            {t('card.cvc', 'CVC')}
           </label>
           <input
             type="text"

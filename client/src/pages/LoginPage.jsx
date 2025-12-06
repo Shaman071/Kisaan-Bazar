@@ -7,7 +7,10 @@ import { login, clearError } from "../redux/slices/authSlice";
 import { FaEnvelope, FaLock, FaLeaf } from "react-icons/fa";
 import Loader from "../components/Loader";
 
+import { useTranslation } from "react-i18next";
+
 const LoginPage = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -49,7 +52,7 @@ const LoginPage = () => {
             <FaLeaf className="text-green-500 text-4xl" />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+            {t('auth.login_title')}
           </h2>
           <p className="mt-2 text-sm text-gray-600">
             Or{" "}
@@ -57,7 +60,7 @@ const LoginPage = () => {
               to="/register"
               className="font-medium text-green-600 hover:text-green-500"
             >
-              create a new account
+              {t('auth.or_register')}
             </Link>
           </p>
         </div>
@@ -78,7 +81,7 @@ const LoginPage = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Email Address
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -93,7 +96,7 @@ const LoginPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="form-input pl-10"
-                  placeholder="Email address"
+                  placeholder={t('auth.email')}
                 />
               </div>
             </div>
@@ -103,7 +106,7 @@ const LoginPage = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Password
+                {t('auth.password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -118,7 +121,7 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="form-input pl-10"
-                  placeholder="Password"
+                  placeholder={t('auth.password')}
                 />
               </div>
             </div>
@@ -136,7 +139,7 @@ const LoginPage = () => {
                 htmlFor="remember-me"
                 className="ml-2 block text-sm text-gray-900"
               >
-                Remember me
+                {t('auth.remember_me')}
               </label>
             </div>
 
@@ -145,7 +148,7 @@ const LoginPage = () => {
                 href="#"
                 className="font-medium text-green-600 hover:text-green-500"
               >
-                Forgot your password?
+                {t('auth.forgot_password')}
               </a>
             </div>
           </div>
@@ -156,7 +159,7 @@ const LoginPage = () => {
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               disabled={loading}
             >
-              {loading ? "Signing in..." : "Sign in"}
+              {loading ? t('auth.signing_in') : t('auth.sign_in')}
             </button>
           </div>
         </form>

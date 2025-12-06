@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom"
 import { FaCircle } from "react-icons/fa"
+import { useTranslation } from "react-i18next"
 
 const MessageItem = ({ conversation }) => {
+  const { t } = useTranslation()
+
   // Format date
   const formatDate = (dateString) => {
     const date = new Date(dateString)
@@ -31,10 +34,10 @@ const MessageItem = ({ conversation }) => {
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="font-medium">{conversation.user?.name || "Unknown User"}</h3>
+                <h3 className="font-medium">{conversation.user?.name || t('messages.unknown_user', "Unknown User")}</h3>
                 <span className="text-xs text-gray-500 capitalize">({conversation.user?.role || "user"})</span>
               </div>
-              <p className="text-sm text-gray-600 truncate max-w-xs">{conversation.lastMessage?.content || "No message"}</p>
+              <p className="text-sm text-gray-600 truncate max-w-xs">{conversation.lastMessage?.content || t('messages.no_message', "No message")}</p>
             </div>
           </div>
 
@@ -43,7 +46,7 @@ const MessageItem = ({ conversation }) => {
             {conversation.unreadCount > 0 && (
               <div className="flex items-center space-x-1">
                 <FaCircle className="text-green-500 text-xs" />
-                <span className="text-xs font-medium">{conversation.unreadCount} new</span>
+                <span className="text-xs font-medium">{conversation.unreadCount} {t('messages.new', 'new')}</span>
               </div>
             )}
           </div>

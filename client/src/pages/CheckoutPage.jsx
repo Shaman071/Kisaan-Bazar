@@ -12,8 +12,10 @@ import { createOrder } from "../redux/slices/orderSlice";
 import { FaArrowLeft, FaLeaf, FaTrash } from "react-icons/fa";
 import Loader from "../components/Loader";
 import { placeholder } from "../assets";
+import { useTranslation } from "react-i18next";
 
 const CheckoutPage = () => {
+  const { t } = useTranslation();
   const [orderType, setOrderType] = useState("pickup");
   const [orderDetails, setOrderDetails] = useState({
     pickupDetails: {
@@ -156,15 +158,15 @@ const CheckoutPage = () => {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <FaLeaf className="text-green-500 text-5xl mx-auto mb-4" />
-        <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
+        <h2 className="text-2xl font-bold mb-4">{t('checkout.empty_cart', 'Your Cart is Empty')}</h2>
         <p className="text-gray-600 mb-6">
-          Looks like you haven't added any products to your cart yet.
+          {t('checkout.empty_cart_desc', "Looks like you haven't added any products to your cart yet.")}
         </p>
         <button
           onClick={() => navigate("/products")}
           className="btn btn-primary"
         >
-          Browse Products
+          {t('checkout.browse_products', 'Browse Products')}
         </button>
       </div>
     );
@@ -177,20 +179,20 @@ const CheckoutPage = () => {
         className="flex items-center text-green-500 hover:text-green-700 mb-6"
       >
         <FaArrowLeft className="mr-2" />
-        Continue Shopping
+        {t('checkout.continue_shopping', 'Continue Shopping')}
       </button>
 
-      <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+      <h1 className="text-3xl font-bold mb-8">{t('checkout.title', 'Checkout')}</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('checkout.your_cart', 'Your Cart')}</h2>
 
             <div className="mb-4">
               <div className="flex items-center text-gray-600 mb-2">
                 <FaLeaf className="text-green-500 mr-2" />
-                <span>Ordering from: {farmerName}</span>
+                <span>{t('checkout.ordering_from', 'Ordering from')}: {farmerName}</span>
               </div>
             </div>
 
@@ -231,7 +233,7 @@ const CheckoutPage = () => {
                         htmlFor={`quantity-${item.productId}`}
                         className="sr-only"
                       >
-                        Quantity
+                        {t('products.quantity', 'Quantity')}
                       </label>
                       <input
                         type="number"
@@ -257,7 +259,7 @@ const CheckoutPage = () => {
                         className="text-red-500 hover:text-red-700 text-sm flex items-center mt-1"
                       >
                         <FaTrash className="mr-1" />
-                        <span>Remove</span>
+                        <span>{t('checkout.remove', 'Remove')}</span>
                       </button>
                     </div>
                   </div>
@@ -270,10 +272,10 @@ const CheckoutPage = () => {
                 onClick={() => dispatch(clearCart())}
                 className="text-red-500 hover:text-red-700"
               >
-                Clear Cart
+                {t('checkout.clear_cart', 'Clear Cart')}
               </button>
               <div className="text-xl font-bold">
-                Total: ₹{calculateTotal().toFixed(2)}
+                {t('orders.total', 'Total')}: ₹{calculateTotal().toFixed(2)}
               </div>
             </div>
           </div>
@@ -281,12 +283,12 @@ const CheckoutPage = () => {
 
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('checkout.order_details', 'Order Details')}</h2>
 
             <form onSubmit={handleSubmitOrder}>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Order Type
+                  {t('checkout.order_type', 'Order Type')}
                 </label>
                 <div className="flex space-x-4">
                   <label className="flex items-center">
@@ -298,7 +300,7 @@ const CheckoutPage = () => {
                       onChange={() => setOrderType("pickup")}
                       className="mr-2 pl-3"
                     />
-                    Pickup
+                    {t('checkout.pickup', 'Pickup')}
                   </label>
                   <label className="flex items-center">
                     <input
@@ -309,7 +311,7 @@ const CheckoutPage = () => {
                       onChange={() => setOrderType("delivery")}
                       className="mr-2 pl-3"
                     />
-                    Delivery
+                    {t('checkout.delivery', 'Delivery')}
                   </label>
                 </div>
               </div>
@@ -321,7 +323,7 @@ const CheckoutPage = () => {
                       htmlFor="pickupDate"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      Pickup Date
+                      {t('checkout.pickup_date', 'Pickup Date')}
                     </label>
                     <input
                       type="date"
@@ -339,7 +341,7 @@ const CheckoutPage = () => {
                       htmlFor="pickupTime"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      Pickup Time
+                      {t('checkout.pickup_time', 'Pickup Time')}
                     </label>
                     <input
                       type="time"
@@ -357,7 +359,7 @@ const CheckoutPage = () => {
                       htmlFor="pickupLocation"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      Pickup Location
+                      {t('checkout.pickup_location', 'Pickup Location')}
                     </label>
                     <input
                       type="text"
@@ -366,7 +368,7 @@ const CheckoutPage = () => {
                       value={orderDetails.pickupDetails.location}
                       onChange={handleInputChange}
                       className="form-input pl-3"
-                      placeholder="Farm address or specific pickup point"
+                      placeholder={t('checkout.farm_address_placeholder', 'Farm address or specific pickup point')}
                       required
                     />
                   </div>
@@ -375,7 +377,7 @@ const CheckoutPage = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Delivery Address
+                      {t('checkout.delivery_address', 'Delivery Address')}
                     </label>
                     <input
                       type="text"
@@ -383,7 +385,7 @@ const CheckoutPage = () => {
                       value={orderDetails.deliveryDetails.address.street}
                       onChange={handleInputChange}
                       className="form-input mb-2 pl-3"
-                      placeholder="Street address"
+                      placeholder={t('checkout.street_placeholder', 'Street address')}
                       required
                     />
 
@@ -394,7 +396,7 @@ const CheckoutPage = () => {
                         value={orderDetails.deliveryDetails.address.city}
                         onChange={handleInputChange}
                         className="form-input pl-3"
-                        placeholder="City"
+                        placeholder={t('checkout.city_placeholder', 'City')}
                         required
                       />
                       <input
@@ -403,7 +405,7 @@ const CheckoutPage = () => {
                         value={orderDetails.deliveryDetails.address.state}
                         onChange={handleInputChange}
                         className="form-input pl-3"
-                        placeholder="State"
+                        placeholder={t('checkout.state_placeholder', 'State')}
                         required
                       />
                     </div>
@@ -414,7 +416,7 @@ const CheckoutPage = () => {
                       value={orderDetails.deliveryDetails.address.zipCode}
                       onChange={handleInputChange}
                       className="form-input pl-3"
-                      placeholder="ZIP / Postal code"
+                      placeholder={t('checkout.zip_placeholder', 'ZIP / Postal code')}
                       required
                     />
                   </div>
@@ -424,7 +426,7 @@ const CheckoutPage = () => {
                       htmlFor="deliveryDate"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      Delivery Date
+                      {t('checkout.delivery_date', 'Delivery Date')}
                     </label>
                     <input
                       type="date"
@@ -442,7 +444,7 @@ const CheckoutPage = () => {
                       htmlFor="deliveryTime"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      Delivery Time
+                      {t('checkout.delivery_time', 'Delivery Time')}
                     </label>
                     <input
                       type="time"
@@ -462,7 +464,7 @@ const CheckoutPage = () => {
                   htmlFor="paymentMethod"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Payment Method
+                  {t('checkout.payment_method', 'Payment Method')}
                 </label>
                 <select
                   id="paymentMethod"
@@ -472,9 +474,9 @@ const CheckoutPage = () => {
                   className="form-input pl-3"
                   required
                 >
-                  <option value="cash">Cash on Pickup/Delivery</option>
-                  <option value="bank_transfer">Bank Transfer</option>
-                  <option value="other">Other</option>
+                  <option value="cash">{t('checkout.cash_on_delivery', 'Cash on Pickup/Delivery')}</option>
+                  <option value="bank_transfer">{t('checkout.bank_transfer', 'Bank Transfer')}</option>
+                  <option value="other">{t('checkout.other', 'Other')}</option>
                 </select>
               </div>
 
@@ -483,7 +485,7 @@ const CheckoutPage = () => {
                   htmlFor="notes"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Order Notes (Optional)
+                  {t('checkout.order_notes', 'Order Notes (Optional)')}
                 </label>
                 <textarea
                   id="notes"
@@ -492,7 +494,7 @@ const CheckoutPage = () => {
                   value={orderDetails.notes}
                   onChange={handleInputChange}
                   className="form-input pl-3"
-                  placeholder="Any special instructions or requests..."
+                  placeholder={t('checkout.notes_placeholder', 'Any special instructions or requests...')}
                 ></textarea>
               </div>
 
@@ -501,7 +503,7 @@ const CheckoutPage = () => {
                 className="btn btn-primary w-full mt-6"
                 disabled={loading}
               >
-                {loading ? "Processing..." : "Place Order"}
+                {loading ? t('checkout.processing', 'Processing...') : t('checkout.place_order', 'Place Order')}
               </button>
             </form>
           </div>
